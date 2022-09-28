@@ -1,10 +1,13 @@
 package ru.netology.hibernate;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.netology.hibernate.entity.Identifier;
 import ru.netology.hibernate.entity.Person;
+import ru.netology.hibernate.repository.PersonRepositoryJPA;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,15 +17,18 @@ import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+@RequiredArgsConstructor
 @Component
 public class CommandLineApp implements CommandLineRunner {
 
-    @PersistenceContext
-    EntityManager entityManager;
+    private final PersonRepositoryJPA personRepositoryJPA;
+
+//    @PersistenceContext
+//    EntityManager entityManager;
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         var names = List.of("Вася", "Петя", "Саша", "Федя");
         var surnames = List.of("Васильев", "Петров", "Александров", "Федоров");
@@ -42,7 +48,11 @@ public class CommandLineApp implements CommandLineRunner {
                             .phoneNumber(phoneNumbers.get(random.nextInt(phoneNumbers.size())))
                             .build();
 
-                    entityManager.persist(person);
+                    personRepositoryJPA.save(person);
+                    personRepositoryJPA.findByCityOfLiving("Москва")
+                            .forEach(System.out::println);
+//                    personRepositoryJPA.findAllByIdentifierAgeLessThanOrderByIdentifierAgeAsc(5)
+//                            .forEach(System.out::println);
                 });
 
 //        Query query = entityManager.createQuery("select p from Person p where p.cityOfLiving=:city_of_living");
