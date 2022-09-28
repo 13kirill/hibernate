@@ -48,7 +48,7 @@ public class CommandLineApp implements CommandLineRunner {
                             .phoneNumber(phoneNumbers.get(random.nextInt(phoneNumbers.size())))
                             .build();
 
-                    //personRepositoryJPA.save(person);
+                    personRepositoryJPA.save(person);
                     personRepositoryJPA.findByCityOfLiving("Москва")
                             .forEach(System.out::println);
 //                    personRepositoryJPA.findAllByIdentifierAgeLessThanOrderByIdentifierAgeAsc(5)
